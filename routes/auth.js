@@ -49,7 +49,7 @@ router.post("/signin", async (req,res)=>{
         return;
     }
     else{
-        const token = jwt.sign({id: user._id,isadmin:user.isAdmin},process.env.JWT_SECRET)
+        const token = jwt.sign({id: user._id,isadmin:user.isAdmin},"salt")
         res.json({token: token,name: user.username})
         return ;
     }
