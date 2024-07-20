@@ -39,7 +39,7 @@ router.post("/send",verifyToken, async (req, res) => {
 });
 
 
-router.get("/get",verifyToken,async (req,res) => {
+router.get("/get",async (req,res) => {
     const token = req.headers["authorization"];
 
     var uid =jwt.decode(token).id
