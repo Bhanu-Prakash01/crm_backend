@@ -14,7 +14,7 @@ router.get("/",verifyAdminToken,async (req, res) => {
 });
 
 
-router.post("/send",verifyToken, async (req, res) => {
+router.post("/send", async (req, res) => {
     const {company_name, url,email,phone,handles} = req.body;
     const token = req.headers["authorization"];
     console.log(req.body);
