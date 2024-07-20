@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-const verifyToken = (req, res, next) => {
+const User = require('../models/user');
+const verifyAdminToken = async (req, res, next) => {
   const token = req.headers["authorization"];
 
   if (!token) {
@@ -8,9 +9,14 @@ const verifyToken = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    // if (decoded.id !== req.params.id && decoded.isadmin==false) {
+    const user = await User.findById(decoded.id);
+    console.log(user);
+    // if (user.isAdmin) {
     //   return res.status(403).json({ message: "Unauthorized access" });
     // }
+    if (!decoded.isadmin) {
+      return res.status(403).json({ message: "Unauthorized access" });
+    }
 
     next();
   } catch (error) {
@@ -18,4 +24,4 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-module.exports.verifyToken = verifyToken;
+module.exports.verifyAdminToken = verifyAdminToken;

@@ -2,8 +2,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const auth = require("./routes/auth");
 require('dotenv').config();
+const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const app = express();
+const cors = require('cors')
+app.use(morgan());
+app.use(cors());
 app.use(bodyParser.json());
 mongoose.set("strictQuery", false);
 const data = require("./routes/data");

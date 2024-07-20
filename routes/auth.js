@@ -16,7 +16,9 @@ router.get("/:id", async (req,res)=>{
 
 router.post("/signup", async (req,res)=>{
     const {username,email,password,role} = req.body
-    const hashpass = await bcrypt.hash(password, process.env.JWT_SECRET);
+    console.log(req.body)
+    const hashpass = await bcrypt.hash(password, salt);
+    console.log(hashpass)
     const user = new User({
         username:username,
         email:email,
@@ -35,6 +37,7 @@ router.post("/signup", async (req,res)=>{
 });
 
 router.post("/signin", async (req,res)=>{
+    // console.log(req.body);
     const user = await User.findOne({email: req.body.email});
     const pass_check=await bcrypt.compare( req.body.password,user.password)
     if(!user){
@@ -46,8 +49,8 @@ router.post("/signin", async (req,res)=>{
         return;
     }
     else{
-        const token = jwt.sign({id: user._id},process.env.JWT_SECRET)
-        res.json({token: token,id: user._id})
+        const token = jwt.sign({id: user._id,isadmin:user.isAdmin},process.env.JWT_SECRET)
+        res.json({token: token,name: user.username})
         return ;
     }
 });
