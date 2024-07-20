@@ -7,7 +7,14 @@ const bodyParser = require('body-parser');
 const app = express();
 const cors = require('cors')
 app.use(morgan());
-app.use(cors());
+// Use the CORS middleware with a wildcard
+const corsOptions = {
+    origin: '*', // Allow all origins
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow specific methods
+    allowedHeaders: ['Content-Type', 'Authorization'] // Allow specific headers
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 mongoose.set("strictQuery", false);
 const data = require("./routes/data");
