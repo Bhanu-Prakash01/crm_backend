@@ -39,13 +39,14 @@ router.post("/signup", async (req,res)=>{
 router.post("/signin", async (req,res)=>{
     // console.log(req.body);
     const user = await User.findOne({email: req.body.email});
-    const pass_check=await bcrypt.compare( req.body.password,user.password)
     if(!user){
-        res.send("Username does not exists")
+        res.status(401).send("Username does not exists")
         return;
     }
+    const pass_check=await bcrypt.compare( req.body.password,user.password)
+
     if(!pass_check){
-        res.send("Incorrect Password")
+        res.status(400).send("Incorrect Password")
         return;
     }
     else{
