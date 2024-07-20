@@ -23,7 +23,7 @@ const data = require("./routes/data");
 
 
 
-mongoose.connect(process.env.MONGODB_URL, {
+mongoose.connect("mongodb+srv://kingkite44:jRta1uw2EbufG5sl@cluster0.aogpmcg.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
