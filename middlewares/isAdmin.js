@@ -14,9 +14,9 @@ const verifyAdminToken = async (req, res, next) => {
     // if (user.isAdmin) {
     //   return res.status(403).json({ message: "Unauthorized access" });
     // }
-    if (!decoded.isadmin) {
-      return res.status(403).json({ message: "Unauthorized access" });
-    }
+    // if (!decoded.isadmin) {
+    //   return res.status(403).json({ message: "Unauthorized access" });
+    // }
 
     next();
   } catch (error) {
