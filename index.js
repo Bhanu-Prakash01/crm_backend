@@ -14,7 +14,8 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization'] // Allow specific headers
 };
 
-app.use(cors(corsOptions));
+app.use(cors());
+app.options('*', cors());
 app.use(bodyParser.json());
 mongoose.set("strictQuery", false);
 const data = require("./routes/data");
