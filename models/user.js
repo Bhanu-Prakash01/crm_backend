@@ -22,6 +22,9 @@ const userSchema = new mongoose.Schema({
    type: String,
    enum: ['data-entry', 'data-analyst']
  },
+ task:{
+   type: String
+ },
  isAdmin:{
     type: Boolean,
     default: false,

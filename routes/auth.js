@@ -9,9 +9,9 @@ router.get("/", async (req, res)=>{
 })
 
 
-router.get("/:id", async (req,res)=>{
-    res.send("user by id");
-});
+// router.get("/:id", async (req,res)=>{
+//     res.send("user by id");
+// });
 
 
 router.post("/signup", async (req,res)=>{
@@ -34,6 +34,25 @@ router.post("/signup", async (req,res)=>{
         console.log(err);
         res.status(400).send("ducplicate Entry Found");
     }
+});
+
+
+router.post("/task_update", async (req, res) => {
+    
+
+});
+router.get("/task", async (req, res) => {
+    // const user = await User.findById(req.params.id);
+    // if (!user) {
+    //     return res.status(404).json({ message: "User not found" });
+    // }
+    // res.send(user);
+    const token = req.headers["authorization"];
+
+    var uid =jwt.decode(token).id
+    // res.send(uid);
+    const data = await User.findById(uid);
+    res.send(data.task);
 });
 
 router.post("/signin", async (req,res)=>{
