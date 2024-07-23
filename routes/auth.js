@@ -38,7 +38,12 @@ router.post("/signup", async (req,res)=>{
 
 
 router.post("/task_update", async (req, res) => {
-    
+    const {task,email} = req.body;
+    const data = await User.findOneAndUpdate({email: email},{
+        $set: {
+            task: task
+        }
+    });
 
 });
 router.get("/task", async (req, res) => {
