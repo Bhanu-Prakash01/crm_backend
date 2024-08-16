@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const dateSelect = document.getElementById('date-select');
             const tableBody = document.getElementById('data-entries');
             const totalEntriesElement = document.getElementById('total-entries');
+            const recordDetailsSection = document.getElementById('record-details');
+            const detailsContainer = document.getElementById('details-container');
+            const closeDetailsButton = document.getElementById('close-details');
 
             // Extract unique dates and populate the dropdown
             const uniqueDates = [...new Set(data.map(entry => entry._id.date))];
@@ -42,14 +45,45 @@ document.addEventListener('DOMContentLoaded', () => {
                     countCell.textContent = entry.count;
                     row.appendChild(countCell);
 
-                    // Records
+                    // Records (Clickable to view details)
                     const recordsCell = document.createElement('td');
-                    recordsCell.textContent = entry.records.length; // Show number of records
+                    const viewDetailsButton = document.createElement('button');
+                    viewDetailsButton.textContent = 'View Details';
+                    viewDetailsButton.addEventListener('click', () => {
+                        showRecordDetails(entry.records);
+                    });
+                    recordsCell.appendChild(viewDetailsButton);
                     row.appendChild(recordsCell);
 
                     tableBody.appendChild(row);
                 });
             }
+
+            // Function to show detailed records for a selected entry
+            function showRecordDetails(records) {
+                detailsContainer.innerHTML = ''; // Clear previous details
+                records.forEach(record => {
+                    const recordDiv = document.createElement('div');
+                    recordDiv.classList.add('record-detail');
+
+                    recordDiv.innerHTML = `
+                        <p><strong>Company Name:</strong> ${record.company_name}</p>
+                        <p><strong>URL:</strong> <a href="${record.url}" target="_blank">${record.url}</a></p>
+                        <p><strong>Email:</strong> ${record.email}</p>
+                        <p><strong>Phone:</strong> ${record.phone}</p>
+                        <p><strong>Handles:</strong> ${record.handles}</p>
+                        <p><strong>Source:</strong> ${record.source}</p>
+                    `;
+
+                    detailsContainer.appendChild(recordDiv);
+                });
+                recordDetailsSection.classList.remove('hidden'); // Show the details section
+            }
+
+            // Close the details section
+            closeDetailsButton.addEventListener('click', () => {
+                recordDetailsSection.classList.add('hidden'); // Hide the details section
+            });
 
             // Initial render with the first date
             if (uniqueDates.length > 0) {
@@ -59,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Event listener for date selection
             dateSelect.addEventListener('change', (event) => {
                 renderTable(event.target.value);
+                recordDetailsSection.classList.add('hidden'); // Hide details section when date changes
             });
         })
         .catch(error => console.error('Error fetching data:', error));

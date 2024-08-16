@@ -11,26 +11,38 @@
         <h1>Daily Data Entries</h1>
     </header>
     <main>
-        <label for="date-select">Select a Date:</label>
-        <select id="date-select">
-            <!-- Dates will be dynamically populated here -->
-        </select>
+        <div class="container">
+            <div class="controls">
+                <label for="date-select">Select a Date:</label>
+                <select id="date-select">
+                    <!-- Dates will be dynamically populated here -->
+                </select>
+            </div>
 
-        <p id="total-entries">Total Entries: 0</p>
+            <p id="total-entries" class="total-entries">Total Entries: 0</p>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Username</th>
-                    <th>Entry Count</th>
-                    <th>Records</th>
-                </tr>
-            </thead>
-            <tbody id="data-entries">
-                <!-- Data will be injected here by JavaScript -->
-            </tbody>
-        </table>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Username</th>
+                        <th>Entry Count</th>
+                        <th>Records</th>
+                    </tr>
+                </thead>
+                <tbody id="data-entries">
+                    <!-- Data will be injected here by JavaScript -->
+                </tbody>
+            </table>
+
+            <section id="record-details" class="hidden">
+                <h2>Record Details</h2>
+                <div id="details-container">
+                    <!-- Detailed record information will be displayed here -->
+                </div>
+                <button id="close-details">Close</button>
+            </section>
+        </div>
     </main>
     <script src="script.js"></script>
 </body>
