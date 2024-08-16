@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Data Entries</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Daily Data Entries</h1>
+    </header>
+    <main>
+        <label for="date-select">Select a Date:</label>
+        <select id="date-select">
+            <!-- Dates will be dynamically populated here -->
+        </select>
+
+        <p id="total-entries">Total Entries: 0</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Username</th>
+                    <th>Entry Count</th>
+                    <th>Records</th>
+                </tr>
+            </thead>
+            <tbody id="data-entries">
+                <!-- Data will be injected here by JavaScript -->
+            </tbody>
+        </table>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>

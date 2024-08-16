@@ -5,6 +5,7 @@ require('dotenv').config();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const app = express();
+const path = require('path');
 const cors = require('cors')
 app.use(morgan());
 // Use the CORS middleware with a wildcard
@@ -37,6 +38,7 @@ mongoose.connect("mongodb+srv://kingkite44:jRta1uw2EbufG5sl@cluster0.aogpmcg.mon
 app.use("/users",auth)
 app.use("/data",data)
 
+app.use(express.static(path.join(__dirname, './public')));
 
 
 app.get("/",(req,res)=>{

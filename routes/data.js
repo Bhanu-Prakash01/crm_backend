@@ -58,7 +58,7 @@ router.get("/stats", async (req, res) => {
                 $sort: { "_id.date": 1 } // Sort by date
             }
         ]);
-
+ 
         res.json(entries);
     } catch (err) {
         res.status(500).json({ message: err.message });
