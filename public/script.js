@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const totalEntriesElement = document.getElementById('total-entries');
             const recordDetailsSection = document.getElementById('record-details');
             const detailsContainer = document.getElementById('details-container');
-            const closeDetailsButton = document.getElementById('close-details');
 
             // Extract unique dates and populate the dropdown
             const uniqueDates = [...new Set(data.map(entry => entry._id.date))];
@@ -49,8 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     const recordsCell = document.createElement('td');
                     const viewDetailsButton = document.createElement('button');
                     viewDetailsButton.textContent = 'View Details';
+                    viewDetailsButton.classList.add('view-details-button');
                     viewDetailsButton.addEventListener('click', () => {
-                        showRecordDetails(entry.records);
+                        toggleRecordDetails(entry.records, viewDetailsButton);
                     });
                     recordsCell.appendChild(viewDetailsButton);
                     row.appendChild(recordsCell);
@@ -59,31 +59,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
 
-            // Function to show detailed records for a selected entry
-            function showRecordDetails(records) {
-                detailsContainer.innerHTML = ''; // Clear previous details
-                records.forEach(record => {
-                    const recordDiv = document.createElement('div');
-                    recordDiv.classList.add('record-detail');
+            // Function to toggle detailed records
+            function toggleRecordDetails(records, button) {
+                // Clear previous details
+                detailsContainer.innerHTML = ''; 
 
-                    recordDiv.innerHTML = `
-                        <p><strong>Company Name:</strong> ${record.company_name}</p>
-                        <p><strong>URL:</strong> <a href="${record.url}" target="_blank">${record.url}</a></p>
-                        <p><strong>Email:</strong> ${record.email}</p>
-                        <p><strong>Phone:</strong> ${record.phone}</p>
-                        <p><strong>Handles:</strong> ${record.handles}</p>
-                        <p><strong>Source:</strong> ${record.source}</p>
-                    `;
+                if (recordDetailsSection.classList.contains('hidden')) {
+                    // Show details
+                    records.forEach(record => {
+                        const recordDiv = document.createElement('div');
+                        recordDiv.classList.add('record-detail');
 
-                    detailsContainer.appendChild(recordDiv);
-                });
-                recordDetailsSection.classList.remove('hidden'); // Show the details section
+                        recordDiv.innerHTML = `
+                            <p><strong>Company Name:</strong> ${record.company_name}</p>
+                            <p><strong>URL:</strong> <a href="${record.url}" target="_blank">${record.url}</a></p>
+                            <p><strong>Email:</strong> ${record.email}</p>
+                            <p><strong>Phone:</strong> ${record.phone}</p>
+                            <p><strong>Handles:</strong> ${record.handles}</p>
+                            <p><strong>Source:</strong> ${record.source}</p>
+                        `;
+
+                        detailsContainer.appendChild(recordDiv);
+                    });
+                    recordDetailsSection.classList.remove('hidden'); // Show the details section
+                    button.textContent = 'Hide Details'; // Change button text to Hide Details
+                } else {
+                    // Hide details
+                    recordDetailsSection.classList.add('hidden');
+                    button.textContent = 'View Details'; // Change button text back to View Details
+                }
             }
-
-            // Close the details section
-            closeDetailsButton.addEventListener('click', () => {
-                recordDetailsSection.classList.add('hidden'); // Hide the details section
-            });
 
             // Initial render with the first date
             if (uniqueDates.length > 0) {
