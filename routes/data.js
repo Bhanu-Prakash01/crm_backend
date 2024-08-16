@@ -8,10 +8,62 @@ const { verifyAdminToken } = require('../middlewares/isAdmin');
 
 
 
-router.get("/",verifyAdminToken,async (req, res) => {
+router.get("/",async (req, res) => {
     const all_data = await Data.find();
     res.send(all_data)
 });
+
+
+router.get("/stats", async (req, res) => {
+    try {
+        const entries = await Data.aggregate([
+            {
+                $group: {
+                    _id: {
+                        user: "$entered_by",
+                        date: {
+                            $dateToString: { format: "%Y-%m-%d", date: "$createdAt" }
+                        }
+                    },
+                    count: { $sum: 1 }, // Count the number of records per day per user
+                    records: { $push: "$$ROOT" } // Include the entire document in 'records'
+                }
+            },
+            {
+                $addFields: {
+                    userId: { $toObjectId: "$_id.user" } // Convert entered_by to ObjectId
+                }
+            },
+            {
+                $lookup: {
+                    from: "users", // Collection name of the users
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "user_info"
+                }
+            },
+            {
+                $unwind: "$user_info" // Unwind the array to get the user object
+            },
+            {
+                $project: {
+                    userId: 1,
+                    "user_info.username": 1, // Project only the username
+                    count: 1,
+                    records: 1,
+                    "_id.date": 1
+                }
+            },
+            {
+                $sort: { "_id.date": 1 } // Sort by date
+            }
+        ]);
+
+        res.json(entries);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+})
 
 
 router.post("/send", async (req, res) => {
