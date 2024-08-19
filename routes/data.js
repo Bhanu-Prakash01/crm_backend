@@ -55,7 +55,7 @@ router.get("/stats", async (req, res) => {
                 }
             },
             {
-                $sort: { "_id.date": 1 } // Sort by date
+                $sort: { "_id.date": -1 } // Sort by date
             }
         ]);
  
