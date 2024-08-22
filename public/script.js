@@ -7,9 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const totalEntriesElement = document.getElementById('total-entries');
             const recordDetailsSection = document.getElementById('record-details');
             const detailsContainer = document.getElementById('details-container');
+            const usernameSearch = document.getElementById('username-search');
+            const autocompleteList = document.getElementById('autocomplete-list');
 
-            // Extract unique dates and populate the dropdown
+            // Extract unique dates and usernames
             const uniqueDates = [...new Set(data.map(entry => entry._id.date))];
+            const usernames = [...new Set(data.map(entry => entry.user_info.username.toLowerCase()))];
+
             uniqueDates.forEach(date => {
                 const option = document.createElement('option');
                 option.value = date;
@@ -17,12 +21,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 dateSelect.appendChild(option);
             });
 
-            // Function to render table data and total entries based on the selected date
-            function renderTable(selectedDate) {
+            // Function to render table data based on the selected date and username
+            function renderTable(selectedDate, searchUsername) {
                 tableBody.innerHTML = ''; // Clear the table
-                const filteredData = data.filter(entry => entry._id.date === selectedDate);
-                
-                // Calculate the total number of entries for the selected date
+
+                let filteredData;
+                if (searchUsername) {
+                    filteredData = data.filter(entry => 
+                        entry.user_info.username.toLowerCase().includes(searchUsername.toLowerCase())
+                    );
+                } else {
+                    filteredData = data.filter(entry => entry._id.date === selectedDate);
+                }
+
+                // Calculate the total number of entries
                 const totalEntries = filteredData.reduce((sum, entry) => sum + entry.count, 0);
                 totalEntriesElement.textContent = `Total Entries: ${totalEntries}`;
 
@@ -90,15 +102,48 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
+            // Function to show autocomplete suggestions
+            function showAutocompleteSuggestions(value) {
+                autocompleteList.innerHTML = ''; // Clear previous suggestions
+                if (value.length > 0) {
+                    const filteredUsernames = usernames.filter(username => username.includes(value.toLowerCase()));
+                    filteredUsernames.forEach(username => {
+                        const li = document.createElement('li');
+                        li.textContent = username;
+                        li.addEventListener('click', () => {
+                            usernameSearch.value = username;
+                            autocompleteList.classList.add('hidden');
+                            renderTable(null, username); // Fetch all records for the selected username
+                        });
+                        autocompleteList.appendChild(li);
+                    });
+                    autocompleteList.classList.remove('hidden');
+                } else {
+                    autocompleteList.classList.add('hidden');
+                }
+            }
+
             // Initial render with the first date
             if (uniqueDates.length > 0) {
-                renderTable(uniqueDates[0]);
+                renderTable(uniqueDates[0], '');
             }
 
             // Event listener for date selection
             dateSelect.addEventListener('change', (event) => {
-                renderTable(event.target.value);
+                renderTable(event.target.value, usernameSearch.value);
                 recordDetailsSection.classList.add('hidden'); // Hide details section when date changes
+            });
+
+            // Event listener for username search input
+            usernameSearch.addEventListener('input', (event) => {
+                showAutocompleteSuggestions(event.target.value);
+            });
+
+            // Hide autocomplete list when clicking outside
+            document.addEventListener('click', (event) => {
+                if (!autocompleteList.contains(event.target) && event.target !== usernameSearch) {
+                    autocompleteList.classList.add('hidden');
+                }
             });
         })
         .catch(error => console.error('Error fetching data:', error));

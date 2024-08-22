@@ -140,3 +140,37 @@ button:hover {
 .view-details-button:hover {
     background-color: #0056b3;
 }
+
+.autocomplete-container {
+    position: relative;
+    display: inline-block;
+}
+
+.autocomplete-list {
+    position: absolute;
+    top: 100%; /* Position just below the input field */
+    right: 0; /* Align to the right side of the container */
+    background-color: white;
+    border: 1px solid #ddd;
+    max-height: 150px;
+    overflow-y: auto;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 200px; /* Set a fixed width for the dropdown */
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.autocomplete-list li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.autocomplete-list li:hover {
+    background-color: #f1f1f1;
+}
+
+.hidden {
+    display: none;
+}
